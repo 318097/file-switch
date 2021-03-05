@@ -1,0 +1,47 @@
+@import "@codedrops/react-ui/dist/styles/colors.scss";
+
+section#settings {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  .block {
+    border-bottom: 1px solid $strokeOne;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    span {
+      color: $blue;
+    }
+  }
+  .new-project {
+    display: flex;
+    align-items: center;
+  }
+  .copy-code {
+    background: $strokeOne;
+    border-radius: 4px;
+    text-align: center;
+    padding: 10px 4px;
+    cursor: pointer;
+  }
+  .topic-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $feather;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    box-shadow: 2px 2px 2px $feather;
+    .content {
+    }
+  }
+}

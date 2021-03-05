@@ -1,0 +1,217 @@
+@import "@codedrops/react-ui/dist/styles/colors.scss";
+@import "@codedrops/react-ui/dist/styles/custom-styles.scss";
+
+.dot-container * {
+  font-family: "Fira Mono", Cascadia-Regular, monospace;
+  font-size: 12px;
+}
+
+.dot-container {
+  position: relative;
+  display: inline-block;
+
+  .close-icon {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 10;
+  }
+  .loader {
+    position: absolute;
+    bottom: -8px;
+    left: -8px;
+    animation: 2s spin linear infinite;
+    width: 20px;
+    height: 20px;
+    background: $coffee;
+    transform: rotate(0deg);
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  @keyframes spin {
+    0% {
+      background: $coffee;
+      transform: rotate(0deg);
+      border-radius: 50%;
+    }
+    25% {
+      background: $yellow;
+    }
+    50% {
+      background: $orange;
+      border-radius: 44%;
+    }
+    75% {
+      background: $primary;
+    }
+    100% {
+      background: $orchid;
+      transform: rotate(360deg);
+      border-radius: 50%;
+    }
+  }
+
+  .card {
+    border-radius: 0;
+    height: 350px;
+    width: 450px;
+    background: $white;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 6px 4px;
+    overflow: visible;
+    box-shadow: 3px 3px $strokeTwo;
+    &:hover {
+      background: $white;
+    }
+    .project-name {
+      position: absolute;
+      right: -8px;
+      bottom: -16px;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-family: "Fira Mono", Cascadia-Bold, monospace;
+      font-weight: 700;
+      z-index: 10;
+      border-color: $chrome;
+    }
+    .header {
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-transform: uppercase;
+      // background: $strokeTwo;
+      color: $bar;
+      flex: 0 0 30px;
+      nav {
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+        .nav-item {
+          color: $steel;
+          margin-right: 8px;
+          cursor: pointer;
+          font-family: "Fira Mono", Cascadia-Bold, monospace;
+          font-weight: 700;
+          &:hover {
+            color: $bar;
+          }
+        }
+        .nav-item.active-page {
+          color: $bar;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    section {
+      flex: 1 1 auto;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+
+  .btn,
+  .inp,
+  .confirm-box-title,
+  .confirm-box-actions .btn,
+  .radio .radio-item,
+  .select-text,
+  .dropdown .dropdown-item,
+  .inputbox,
+  .checkbox,
+  .card {
+    font-size: 12px !important;
+  }
+
+  .timeline {
+    width: 96%;
+    margin: 0 1% 8px 3%;
+    .card {
+      height: auto;
+    }
+  }
+
+  .confirm-box-container {
+    padding: 4px 6px;
+    margin-top: 2px;
+  }
+
+  .empty-message {
+    text-align: center;
+    opacity: 0.4;
+    font-size: 2.4em;
+    font-family: "Fira Mono", Cascadia-Bold, monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+  .empty-todo-list {
+    text-align: center;
+    opacity: 0.4;
+    font-size: 1.2em;
+    font-family: "Fira Mono", Cascadia-Bold, monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 12px;
+  }
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  .content-index {
+    min-width: 20px;
+    display: inline-block;
+    font-size: 10px;
+    position: relative;
+    top: 2px;
+  }
+  .content {
+    line-height: 16px;
+    color: $bar;
+    code {
+      background: $yellow;
+      padding: 2px;
+      border-radius: 2px;
+    }
+  }
+}
+
+.react-ui {
+  h2 {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  h3 {
+    font-size: 12px;
+    border: none;
+    margin-top: 0;
+  }
+}

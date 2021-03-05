@@ -1,0 +1,31 @@
+{
+  "name": "Flash",
+  "version": "1.0",
+  "description": "Quick data addition",
+  "manifest_version": 2,
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage"
+  ],
+  "action": {
+    "default_title": "Flash",
+    "default_popup": "build/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "contentScript.js"
+      ]
+    }
+  ]
+}

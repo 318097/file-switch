@@ -1,0 +1,27 @@
+@import "@codedrops/react-ui/dist/styles/colors.scss";
+
+section#auth {
+  .container {
+    // background: $feather;
+    padding: 20px;
+    width: max-content;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    .inp {
+      margin: 3px 0;
+    }
+
+    .button-wrapper {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+      .link {
+        cursor: pointer;
+        margin-left: 8px;
+      }
+    }
+  }
+}
