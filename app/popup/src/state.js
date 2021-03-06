@@ -1,8 +1,7 @@
 const initialData = {
+  title: "",
   content: "",
-  itemType: "TODO",
-  topic: "",
-  marked: false,
+  url: "",
 };
 
 export const initialState = {

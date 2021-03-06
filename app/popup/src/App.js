@@ -15,12 +15,7 @@ import Home from "./components/Home";
 axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
 
-const navItems = ({ isLoggedIn }) =>
-  [
-    { label: "HOME", visible: isLoggedIn },
-    { label: "SETTINGS", visible: isLoggedIn },
-    { label: "AUTH", visible: !isLoggedIn },
-  ].filter(({ visible }) => visible);
+const navItems = [{ label: "HOME" }, { label: "SETTINGS" }, { label: "AUTH" }];
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -42,7 +37,7 @@ const App = () => {
       });
     } catch (err) {
       logout();
-      console.log("Error: isAccountActive(): ", err);
+      console.log("Error: ", err);
     } finally {
       setTimeout(() => setLoading(false), 500);
     }
@@ -80,7 +75,7 @@ const App = () => {
     try {
       if (action === "LOAD") {
         getDataFromStorage(undefined, (state) => {
-          // console.log("loaded:: state::-", state);
+          // console.log("loaded:", state);
           dispatch({ type: constants.SET_KEY, state });
 
           const { session } = state;
@@ -91,11 +86,11 @@ const App = () => {
           } else isAccountActive(token);
         });
       } else {
-        // console.log("saved:: state::-", state);
+        // console.log("saved:", state);
         setDataInStorage(undefined, newData || state);
       }
     } catch (err) {
-      console.log("Error: process(): ", err);
+      console.log("Error: ", err);
     }
   };
 
@@ -177,7 +172,7 @@ const AppContent = ({
     <Card className="card app-content">
       <div className="header">
         <nav>
-          {navItems({ isLoggedIn }).map(({ label }) => (
+          {navItems.map(({ label }) => (
             <span
               key={label}
               className={`nav-item ${
