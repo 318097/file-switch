@@ -1,6 +1,10 @@
 @import "@codedrops/react-ui/dist/styles/colors.scss";
 @import "@codedrops/react-ui/dist/styles/custom-styles.scss";
 
+html body {
+  margin: 0;
+}
+
 .dot-container * {
   font-family: "Fira Mono", Cascadia-Regular, monospace;
   font-size: 12px;
@@ -54,23 +58,22 @@
     &:hover {
       background: $feather;
     }
-    .project-name {
-      position: absolute;
-      right: -8px;
-      bottom: -16px;
-      font-size: 10px;
-      text-transform: uppercase;
-      font-family: "Fira Mono", Cascadia-Bold, monospace;
-      font-weight: 700;
-      z-index: 10;
-      border-color: $chrome;
-    }
+    // .project-name {
+    //   position: absolute;
+    //   right: -8px;
+    //   bottom: -16px;
+    //   font-size: 10px;
+    //   text-transform: uppercase;
+    //   font-family: "Fira Mono", Cascadia-Bold, monospace;
+    //   font-weight: 700;
+    //   z-index: 10;
+    //   border-color: $chrome;
+    // }
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       text-transform: uppercase;
-      margin-bottom: 8px;
       color: $bar;
       flex: 0 0 30px;
       nav {

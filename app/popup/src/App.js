@@ -175,7 +175,7 @@ const AppContent = ({
 
   return (
     <Card className="card app-content">
-      <div className="header">
+      <div className="header mb">
         <nav>
           {NAV_ITEMS(!!token).map(({ label }) => (
             <span

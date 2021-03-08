@@ -1,9 +1,11 @@
 import config from "./config";
 
 function messenger(payload, cb) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) =>
-    chrome.tabs.sendMessage(tabs[0].id, payload, cb)
-  );
+  if (__ENV__ === "APP") {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) =>
+      chrome.tabs.sendMessage(tabs[0].id, payload, cb)
+    );
+  }
 }
 
 function getDataFromStorage(key = config.STATE_KEY, cb) {
