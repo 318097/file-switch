@@ -9,7 +9,7 @@ import { getDataFromStorage, setDataInStorage } from "./utils";
 
 import Settings from "./components/Settings";
 import Auth from "./components/Auth";
-import Home from "./components/Home";
+import AddItem from "./components/AddItem";
 
 axios.defaults.baseURL = config.FUNCTIONS_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
@@ -86,7 +86,7 @@ const App = () => {
             axios.defaults.headers.common["authorization"] = token;
             dispatch({
               type: constants.SET_KEY,
-              payload: { activePage: "HOME", appLoading: false },
+              payload: { activePage: "HOME" },
             });
           }
           if (!token) {
@@ -116,7 +116,7 @@ const App = () => {
         setAppLoading={setAppLoading}
         logout={logout}
       />
-      {/* {(loading || appLoading) && <div className="loader" />} */}
+      {(loading || appLoading) && <div className="loader" />}
     </div>
   );
 };
@@ -202,7 +202,7 @@ const ActivePage = ({ activePage, ...rest }) => {
       return <Auth {...rest} />;
     case "HOME":
     default:
-      return <Home {...rest} />;
+      return <AddItem {...rest} />;
   }
 };
 

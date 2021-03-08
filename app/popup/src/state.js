@@ -34,7 +34,6 @@ export const reducer = (state, action) => {
       return {
         ...state,
         data: { ...initialData },
-        editTodo: null,
       };
     case constants.SET_DATA:
       return {

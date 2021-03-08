@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Radio,
-  Select,
-  TextArea,
-  Checkbox,
-  Input,
-} from "@codedrops/react-ui";
+import { Button, Radio, TextArea, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
 import { constants } from "../../state";
