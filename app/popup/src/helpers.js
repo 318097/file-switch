@@ -34,27 +34,4 @@ const formatData = ({ topics, todos, today, pendingTasksOnly }) => {
   return today && !hasData ? [] : result;
 };
 
-const getActiveProject = () => {
-  const keys = { storage: null, metaTag: null, active: null, activeKey: null };
-
-  const nodes = document.getElementsByTagName("META");
-  for (let i = 0; i < nodes.length; i++) {
-    if (nodes[i].title === "dot") {
-      keys.metaTag = nodes[i].content;
-      keys.active = nodes[i].content;
-      keys.activeKey = "meta";
-      break;
-    }
-  }
-
-  let projectId = localStorage.getItem(config.LOCAL_PROJECT_KEY);
-  if (projectId) {
-    keys.storage = projectId;
-    keys.active = projectId;
-    keys.activeKey = "storage";
-  }
-
-  return keys;
-};
-
-export { formatData, getActiveProject, formatDate };
+export { formatData, formatDate };

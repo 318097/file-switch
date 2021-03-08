@@ -10,7 +10,8 @@ export const initialState = {
     ...initialData,
   },
   activePage: "HOME",
-  activeProjectId: null,
+  activeCollectionId: null,
+  session: null,
 };
 
 export const constants = {

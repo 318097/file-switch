@@ -3,6 +3,7 @@ import { Button, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./Auth.scss";
 import { constants } from "../../state";
+import config from "../../config";
 
 const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
   const [data, setData] = useState({ username: "", password: "" });
@@ -15,7 +16,10 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
   const handleAuth = async () => {
     setAppLoading(true);
     try {
-      const { data: result } = await axios.post(`/auth/login`, data);
+      const { data: result } = await axios.post(
+        `${config.SERVER_URL}/auth/login`,
+        data
+      );
       dispatch({
         type: constants.SET_SESSION,
         payload: { ...result, isLoggedIn: true },

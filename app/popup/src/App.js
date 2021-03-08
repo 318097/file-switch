@@ -1,18 +1,17 @@
 import React, { useState, useReducer, useEffect, useRef } from "react";
 import "./App.scss";
-import { Card, Icon, Button, Checkbox, Tag } from "@codedrops/react-ui";
+import { Card, Icon, Button, Select } from "@codedrops/react-ui";
 import axios from "axios";
 import _ from "lodash";
 import config from "./config";
 import { constants, reducer, initialState } from "./state";
 import { getDataFromStorage, setDataInStorage } from "./utils";
-import { getActiveProject } from "./helpers";
 
 import Settings from "./components/Settings";
 import Auth from "./components/Auth";
 import Home from "./components/Home";
 
-axios.defaults.baseURL = config.SERVER_URL;
+axios.defaults.baseURL = config.FUNCTIONS_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
 
 const navItems = [{ label: "HOME" }, { label: "SETTINGS" }, { label: "AUTH" }];
@@ -25,6 +24,15 @@ const App = () => {
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  useEffect(() => {
+    process("LOAD", true);
+  }, []);
+
+  useEffect(() => {
+    if (!state.session) return;
+    process("SAVE");
+  }, [state.session]);
 
   const isAccountActive = async (token) => {
     try {
@@ -41,11 +49,6 @@ const App = () => {
     } finally {
       setTimeout(() => setLoading(false), 500);
     }
-  };
-
-  const setActiveProject = () => {
-    const keys = getActiveProject();
-    dispatch({ type: constants.SET_ACTIVE_PROJECT_ID, payload: keys.active });
   };
 
   const setActivePage = (page) =>
@@ -71,23 +74,30 @@ const App = () => {
     setDataInStorage(undefined, initialState);
   };
 
-  const process = (action, newData) => {
+  const process = (action, initialLoad) => {
     try {
       if (action === "LOAD") {
         getDataFromStorage(undefined, (state) => {
-          // console.log("loaded:", state);
-          dispatch({ type: constants.SET_KEY, state });
+          dispatch({ type: constants.SET_KEY, payload: state });
 
           const { session } = state;
           const { token } = session || {};
+          if (initialLoad) {
+            axios.defaults.headers.common["authorization"] = token;
+            dispatch({
+              type: constants.SET_KEY,
+              payload: { activePage: "HOME", appLoading: false },
+            });
+          }
           if (!token) {
             setActivePage("AUTH");
             setLoading(false);
-          } else isAccountActive(token);
+          }
+          // else isAccountActive(token);
         });
       } else {
-        // console.log("saved:", state);
-        setDataInStorage(undefined, newData || state);
+        console.log("saved:", state);
+        setDataInStorage(undefined, state);
       }
     } catch (err) {
       console.log("Error: ", err);
@@ -106,7 +116,7 @@ const App = () => {
         setAppLoading={setAppLoading}
         logout={logout}
       />
-      {(loading || appLoading) && <div className="loader" />}
+      {/* {(loading || appLoading) && <div className="loader" />} */}
     </div>
   );
 };
@@ -119,41 +129,25 @@ const AppContent = ({
   setAppLoading,
   logout,
 }) => {
-  const {
-    activePage,
-    activeProjectId,
-    pendingTasksOnly,
-    session = {},
-    isProjectIdValid,
-  } = state;
-  const { isLoggedIn } = session;
-
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   const {
-    //     data: { todos = [], topics = [] },
-    //   } = await axios.get(`/dot/todos?projectId=${activeProjectId}`);
-    //   dispatch({ type: constants.SET_TOPICS, payload: topics });
-    //   dispatch({ type: constants.SET_TODOS, payload: todos });
-    // };
-
-    if (!isLoggedIn) return;
-    fetchData();
-  }, [isLoggedIn]);
+  const { activePage, activeCollectionId } = state;
 
   const Controls = () => {
     switch (activePage) {
-      case "DOT":
+      case "HOME":
+        const options = Object.entries(
+          _.get(state, "session.notesApp", {})
+        ).map(([id, config]) => ({
+          value: id,
+          label: _.get(config, "name", ""),
+        }));
         return (
-          <Checkbox
-            style={{ margin: "0" }}
-            label={"Pending Tasks"}
-            value={pendingTasksOnly}
-            onChange={(e, value) =>
-              dispatch({
-                type: constants.SET_KEY,
-                payload: { pendingTasksOnly: value },
-              })
+          <Select
+            style={{ width: "max-content" }}
+            options={options}
+            placeholder="Collection"
+            value={activeCollectionId}
+            onChange={(e, activeCollectionId) =>
+              dispatch({ type: "SET_KEY", payload: { activeCollectionId } })
             }
           />
         );
@@ -167,7 +161,6 @@ const AppContent = ({
         return null;
     }
   };
-
   return (
     <Card className="card app-content">
       <div className="header">
@@ -184,7 +177,9 @@ const AppContent = ({
             </span>
           ))}
         </nav>
-        <div className="extra-controls">{/* <Controls /> */}</div>
+        <div className="extra-controls">
+          <Controls />
+        </div>
       </div>
       {!loading && (
         <ActivePage
@@ -195,16 +190,6 @@ const AppContent = ({
           setAppLoading={setAppLoading}
         />
       )}
-
-      {/* {isLoggedIn && (
-        <Tag className="project-name">{`${
-          !isProjectIdValid && activeProjectId
-            ? "Invalid Project Id"
-            : projectName.current
-            ? projectName.current
-            : "No active project"
-        }`}</Tag>
-      )} */}
     </Card>
   );
 };

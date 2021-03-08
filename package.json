@@ -5,9 +5,9 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "dev:app": "webpack-dev-server",
+    "dev:app": "webpack-dev-server --env.NODE_ENV=development",
     "dev:ext": "webpack",
-    "build:app": "webpack"
+    "build:app": "webpack --env.NODE_ENV=production"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.0",

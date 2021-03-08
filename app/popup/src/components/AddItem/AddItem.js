@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import "./AddItem.scss";
 import { constants } from "../../state";
+import { messenger } from "../../utils";
 
 const CREATION_MODE_OPTIONS = [
   { label: "Single", value: "SINGLE" },
@@ -18,23 +19,27 @@ const CREATION_MODE_OPTIONS = [
 ];
 
 const AddItem = ({ state, dispatch, setAppLoading }) => {
-  const { data, activeProjectId: projectId, appLoading } = state;
+  const { data, activeCollectionId: projectId, appLoading } = state;
   const { title, content, url } = data || {};
 
   const [creationMode, setCreationMode] = useState("QUICK");
 
   useEffect(() => {
     if (creationMode !== "SITE") return;
+    messenger({ action: "getWebInfo" }, (info) => {
+      console.log(info);
+    });
   }, [creationMode]);
 
   const add = async () => {
     setAppLoading(true);
-    const {
-      data: { result },
-    } = await axios.post("/dot/todos", {
-      ...data,
-      // collectionId:
-    });
+    try {
+      await axios.post(`/create-post?collectionId=sfd`, {
+        data: [data],
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
     // dispatch({
     //   type: constants.ADD_TODO,
@@ -108,9 +113,9 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
           name="title"
           onChange={(e, value) => handleChange(value)}
           placeholder="Title"
+          autoFocus
         />
         <TextArea
-          autoFocus
           value={content}
           name="content"
           onChange={(e, value) => handleChange(value)}
@@ -126,7 +131,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
           placeholder="URL"
         />
         <div>
-          <Button disabled={appLoading} className="btn" onClick={add}>
+          <Button className="btn" onClick={add}>
             Add
           </Button>
         </div>

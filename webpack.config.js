@@ -2,9 +2,9 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
-module.exports = (...env) => {
-  console.log(`[App]:`, env);
-
+module.exports = (env) => {
+  console.log(`[App]: Running in ${env.NODE_ENV} mode.`);
+  const nodeEnv = (env.NODE_ENV || "").toUpperCase();
   return {
     entry: "./app/popup/index.js",
     mode: "development",
@@ -15,7 +15,7 @@ module.exports = (...env) => {
     },
     devServer: {
       contentBase: path.join(__dirname, "app/build"),
-      port: 9000,
+      port: 9001,
       clientLogLevel: "silent",
       open: true,
     },
@@ -49,7 +49,7 @@ module.exports = (...env) => {
       new HtmlWebpackPlugin({ template: "./app/popup/index.html" }),
       new webpack.DefinePlugin({
         __TYPE__: JSON.stringify("APP"),
-        __ENV__: JSON.stringify("DEVELOPMENT".toUpperCase()),
+        __ENV__: JSON.stringify(nodeEnv),
       }),
     ],
   };
