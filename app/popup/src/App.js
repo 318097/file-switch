@@ -14,42 +14,48 @@ import AddItem from "./components/AddItem";
 axios.defaults.baseURL = config.FUNCTIONS_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
 
-const navItems = [{ label: "HOME" }, { label: "SETTINGS" }, { label: "AUTH" }];
+const NAV_ITEMS = (isLoggedIn) =>
+  [
+    { label: "HOME", visible: isLoggedIn },
+    { label: "SETTINGS", visible: isLoggedIn },
+    { label: "AUTH", visible: !isLoggedIn },
+  ].filter((item) => item.visible);
 
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const stateRef = useRef();
+  // const stateRef = useRef();
+
+  // useEffect(() => {
+  //   stateRef.current = state;
+  // }, [state]);
 
   useEffect(() => {
-    stateRef.current = state;
-  }, [state]);
-
-  useEffect(() => {
-    process("LOAD", true);
+    process("LOAD");
   }, []);
 
   useEffect(() => {
-    if (!state.session) return;
+    if (loading) return;
+
     process("SAVE");
-  }, [state.session]);
+  }, [state]);
 
-  const isAccountActive = async (token) => {
-    try {
-      axios.defaults.headers.common["authorization"] = token;
+  // const isAccountActive = async (token) => {
+  //   try {
+  //     axios.defaults.headers.common["authorization"] = token;
 
-      const { data } = await axios.post(`/auth/account-status`);
-      dispatch({
-        type: constants.SET_SESSION,
-        payload: { ...data, isLoggedIn: true, token },
-      });
-    } catch (err) {
-      logout();
-      console.log("Error: ", err);
-    } finally {
-      setTimeout(() => setLoading(false), 500);
-    }
-  };
+  //     const { data } = await axios.post(`/auth/account-status`);
+  //     dispatch({
+  //       type: constants.SET_SESSION,
+  //       payload: { ...data, isLoggedIn: true, token },
+  //     });
+  //   } catch (err) {
+  //     logout();
+  //     console.log("Error: ", err);
+  //   } finally {
+  //     setTimeout(() => setLoading(false), 500);
+  //   }
+  // };
 
   const setActivePage = (page) =>
     dispatch({
@@ -74,25 +80,27 @@ const App = () => {
     setDataInStorage(undefined, initialState);
   };
 
-  const process = (action, initialLoad) => {
+  const process = (action) => {
     try {
       if (action === "LOAD") {
         getDataFromStorage(undefined, (state) => {
+          console.log("loaded:", state);
           dispatch({ type: constants.SET_KEY, payload: state });
 
           const { session } = state;
           const { token } = session || {};
-          if (initialLoad) {
+
+          let activeTab;
+          if (token) {
             axios.defaults.headers.common["authorization"] = token;
-            dispatch({
-              type: constants.SET_KEY,
-              payload: { activePage: "HOME" },
-            });
+            activeTab = "HOME";
+          } else {
+            activeTab = "AUTH";
           }
-          if (!token) {
-            setActivePage("AUTH");
-            setLoading(false);
-          }
+          dispatch({
+            type: constants.SET_ACTIVE_PAGE,
+            payload: activeTab,
+          });
           // else isAccountActive(token);
         });
       } else {
@@ -101,6 +109,8 @@ const App = () => {
       }
     } catch (err) {
       console.log("Error: ", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,7 +139,8 @@ const AppContent = ({
   setAppLoading,
   logout,
 }) => {
-  const { activePage, activeCollectionId } = state;
+  const { activePage, activeCollectionId, session } = state;
+  const { token } = session || {};
 
   const Controls = () => {
     switch (activePage) {
@@ -161,11 +172,12 @@ const AppContent = ({
         return null;
     }
   };
+
   return (
     <Card className="card app-content">
       <div className="header">
         <nav>
-          {navItems.map(({ label }) => (
+          {NAV_ITEMS(!!token).map(({ label }) => (
             <span
               key={label}
               className={`nav-item ${

@@ -24,7 +24,7 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
         type: constants.SET_SESSION,
         payload: { ...result, isLoggedIn: true },
       });
-      setActivePage("DOT");
+      setActivePage("HOME");
     } catch (err) {
     } finally {
       setAppLoading(false);
