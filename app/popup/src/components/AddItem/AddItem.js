@@ -21,6 +21,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
     if (creationMode !== "SITE") return;
     messenger({ action: "getWebInfo" }, (info) => {
       console.log(info);
+      handleChange(info);
     });
   }, [creationMode]);
 

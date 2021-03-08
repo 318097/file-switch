@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(
       case "getWebInfo":
         senderResponse({
           title: document.title,
-          url: window.location.url,
+          url: window.location.href,
         });
         break;
       case "log":
