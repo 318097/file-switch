@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { Button, Radio, TextArea, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
-import { constants } from "../../state";
+import { constants, initialData } from "../../state";
 import { messenger } from "../../utils";
 
 const CREATION_MODE_OPTIONS = [
@@ -13,7 +13,7 @@ const CREATION_MODE_OPTIONS = [
 
 const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
-  const { title, content, url } = data || {};
+  const { title, content, url, domainUrl } = data || {};
 
   const [creationMode, setCreationMode] = useState("QUICK");
 
@@ -31,15 +31,16 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
       await axios.post(`/create-post-v2?collectionId=${activeCollectionId}`, {
         data: [data],
       });
+      handleChange(initialData);
     } catch (err) {
       console.log(err);
+    } finally {
+      // dispatch({
+      //   type: constants.ADD_TODO,
+      //   payload: result,
+      // });
+      setAppLoading(false);
     }
-
-    // dispatch({
-    //   type: constants.ADD_TODO,
-    //   payload: result,
-    // });
-    setAppLoading(false);
   };
 
   // const updateTodo = async () => {
@@ -126,6 +127,15 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
               onChange={(e, value) => handleChange(value)}
               placeholder="URL"
             />
+            {creationMode === "SITE" && !!domainUrl && (
+              <Input
+                className="input mb"
+                value={domainUrl}
+                name="domainUrl"
+                disabled
+                placeholder="Domain URL"
+              />
+            )}
           </Fragment>
         )}
         <div>

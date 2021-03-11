@@ -5,7 +5,12 @@ function messenger(payload, cb) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) =>
       chrome.tabs.sendMessage(tabs[0].id, payload, cb)
     );
-  }
+  } else
+    cb({
+      title: document.title,
+      url: window.location.href,
+      domainUrl: window.location.hostname,
+    });
 }
 
 function getDataFromStorage(key = config.STATE_KEY, cb) {

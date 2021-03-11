@@ -1,7 +1,8 @@
-const initialData = {
+export const initialData = {
   title: "",
   content: "",
   url: "",
+  domainUrl: "",
 };
 
 export const initialState = {

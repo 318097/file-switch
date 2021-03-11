@@ -68,7 +68,7 @@ const App = () => {
   const logout = () => {
     dispatch({
       type: constants.SET_KEY,
-      payload: { session: {} },
+      payload: initialState,
     });
     setActivePage("AUTH");
     setAppLoading(false);
