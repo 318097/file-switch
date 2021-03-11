@@ -5,6 +5,7 @@ chrome.runtime.onMessage.addListener(
         senderResponse({
           title: document.title,
           url: window.location.href,
+          domainURL: window.location.hostname,
         });
         break;
       case "log":

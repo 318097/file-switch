@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Button, Radio, TextArea, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
@@ -12,7 +12,7 @@ const CREATION_MODE_OPTIONS = [
 ];
 
 const AddItem = ({ state, dispatch, setAppLoading }) => {
-  const { data, activeCollectionId: projectId, appLoading } = state;
+  const { data, activeCollectionId, appLoading } = state;
   const { title, content, url } = data || {};
 
   const [creationMode, setCreationMode] = useState("QUICK");
@@ -28,7 +28,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const add = async () => {
     setAppLoading(true);
     try {
-      await axios.post(`/create-post?collectionId=sfd`, {
+      await axios.post(`/create-post-v2?collectionId=${activeCollectionId}`, {
         data: [data],
       });
     } catch (err) {
@@ -109,23 +109,31 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
           placeholder="Title"
           autoFocus
         />
-        <TextArea
-          value={content}
-          name="content"
-          onChange={(e, value) => handleChange(value)}
-          className="inputbox mb"
-          placeholder="Content.."
-          rows={5}
-        />
-        <Input
-          className="input mb"
-          value={url}
-          name="url"
-          onChange={(e, value) => handleChange(value)}
-          placeholder="URL"
-        />
+        {creationMode !== "SINGLE" && (
+          <Fragment>
+            <TextArea
+              value={content}
+              name="content"
+              onChange={(e, value) => handleChange(value)}
+              className="inputbox mb"
+              placeholder="Content.."
+              rows={5}
+            />
+            <Input
+              className="input mb"
+              value={url}
+              name="url"
+              onChange={(e, value) => handleChange(value)}
+              placeholder="URL"
+            />
+          </Fragment>
+        )}
         <div>
-          <Button className="btn" onClick={add}>
+          <Button
+            disable={appLoading || !activeCollectionId}
+            className="btn"
+            onClick={add}
+          >
             Add
           </Button>
         </div>

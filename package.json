@@ -7,7 +7,7 @@
   "scripts": {
     "dev:app": "webpack-dev-server --env.NODE_ENV=development --env.MODE=app",
     "dev:ext": "webpack --env.NODE_ENV=development --env.MODE=ext",
-    "build:app": "webpack --env.NODE_ENV=production --env.MODE=app",
+    "build:app": "webpack-dev-server --env.NODE_ENV=production --env.MODE=app",
     "build:ext": "webpack --env.NODE_ENV=production --env.MODE=ext"
   },
   "dependencies": {

@@ -13,6 +13,7 @@ import AddItem from "./components/AddItem";
 
 axios.defaults.baseURL = config.FUNCTIONS_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const NAV_ITEMS = (isLoggedIn) =>
   [
@@ -22,13 +23,8 @@ const NAV_ITEMS = (isLoggedIn) =>
   ].filter((item) => item.visible);
 
 const App = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const stateRef = useRef();
-
-  // useEffect(() => {
-  //   stateRef.current = state;
-  // }, [state]);
 
   useEffect(() => {
     process("LOAD");
@@ -38,7 +34,7 @@ const App = () => {
     if (loading) return;
 
     process("SAVE");
-  }, [state]);
+  }, [state.session, state.activeCollectionId, state.activePage]);
 
   // const isAccountActive = async (token) => {
   //   try {
@@ -110,7 +106,7 @@ const App = () => {
     } catch (err) {
       console.log("Error: ", err);
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 500);
     }
   };
 
