@@ -8,6 +8,7 @@ import { constants, reducer, initialState } from "./state";
 import { getDataFromStorage, setDataInStorage } from "./utils";
 
 import Settings from "./components/Settings";
+import History from "./components/History";
 import Auth from "./components/Auth";
 import AddItem from "./components/AddItem";
 
@@ -19,6 +20,7 @@ const NAV_ITEMS = (isLoggedIn) =>
   [
     { label: "HOME", visible: isLoggedIn },
     { label: "SETTINGS", visible: isLoggedIn },
+    { label: "HISTORY", visible: isLoggedIn },
     { label: "AUTH", visible: !isLoggedIn },
   ].filter((item) => item.visible);
 
@@ -34,7 +36,12 @@ const App = () => {
     if (loading) return;
 
     process("SAVE");
-  }, [state.session, state.activeCollectionId, state.activePage]);
+  }, [
+    state.session,
+    state.activeCollectionId,
+    state.activePage,
+    state.history,
+  ]);
 
   // const isAccountActive = async (token) => {
   //   try {
@@ -101,6 +108,7 @@ const App = () => {
         });
       } else {
         console.log("saved:", state);
+        delete state.appLoading;
         setDataInStorage(undefined, state);
       }
     } catch (err) {
@@ -206,6 +214,8 @@ const ActivePage = ({ activePage, ...rest }) => {
   switch (activePage) {
     case "SETTINGS":
       return <Settings {...rest} />;
+    case "HISTORY":
+      return <History {...rest} />;
     case "AUTH":
       return <Auth {...rest} />;
     case "HOME":

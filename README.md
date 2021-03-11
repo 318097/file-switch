@@ -5,4 +5,4 @@
 - [x] Add current website (url, name, description)
 - [x] Add source attribute to know from where the data was added
 - [ ] Search before adding (display back result titles & count)
-- [ ] Store history in chrome storage
+- [x] Store history in chrome storage

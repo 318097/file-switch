@@ -13,6 +13,7 @@ export const initialState = {
   activePage: "HOME",
   activeCollectionId: null,
   session: null,
+  history: [],
 };
 
 export const constants = {
@@ -22,6 +23,7 @@ export const constants = {
   SET_ACTIVE_PAGE: "SET_ACTIVE_PAGE",
   SET_SESSION: "SET_SESSION",
   SET_KEY: "SET_KEY",
+  ADD_TO_HISTORY: "ADD_TO_HISTORY",
 };
 
 export const reducer = (state, action) => {
@@ -51,6 +53,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         session: updatedSession,
+      };
+    case constants.ADD_TO_HISTORY:
+      return {
+        ...state,
+        history: [...state.history, ...action.payload],
       };
     case constants.SET_KEY:
       return {

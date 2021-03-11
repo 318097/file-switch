@@ -1,0 +1,18 @@
+@import "@codedrops/react-ui/dist/styles/colors.scss";
+
+section#history {
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  overflow-y: auto;
+  .item {
+    border: 1px solid $green;
+    background: rgba($color: $green, $alpha: 0.1);
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    .date {
+      font-size: 10px;
+    }
+  }
+}
