@@ -1,7 +1,8 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Button, Radio, TextArea, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
+import { debounce } from "lodash";
 import { constants } from "../../state";
 import { messenger } from "../../utils";
 
@@ -14,11 +15,19 @@ const CREATION_MODE_OPTIONS = [
 const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
   const { title, content, url, domainUrl } = data || {};
+  const searchDbDebounced = useRef();
 
   const [creationMode, setCreationMode] = useState("QUICK");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+
+  useEffect(() => {
+    searchDbDebounced.current = debounce(searchDb, 3000);
+  }, []);
 
   useEffect(() => {
     if (creationMode !== "SITE") return;
+    ``;
     messenger({ action: "getWebInfo" }, handleChange);
   }, [creationMode]);
 
@@ -68,6 +77,26 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
     });
   };
 
+  const searchDb = async (value) => {
+    try {
+      setAppLoading(true);
+      const result = await axios.get(
+        `/get-posts?collectionId=${activeCollectionId}`,
+        {
+          params: {
+            search: value.title,
+          },
+        }
+      );
+      setSearchResults(result.data.posts);
+      setShowSearchResults(true);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setAppLoading(false);
+    }
+  };
+
   return (
     <div className="add-container">
       <div className="options flex mb">
@@ -83,14 +112,36 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
       </div>
 
       <div className="controls">
-        <Input
-          className="input mb"
-          value={title}
-          name="title"
-          onChange={(e, value) => handleChange(value)}
-          placeholder="Title"
-          autoFocus
-        />
+        <div className="flex mb" style={{ position: "relative" }}>
+          <Input
+            style={{ width: "100%" }}
+            className="input"
+            value={title}
+            name="title"
+            autoComplete="off"
+            onChange={(e, value) => {
+              handleChange(value);
+              searchDbDebounced.current(value);
+            }}
+            placeholder="Title"
+            autoFocus
+            onBlur={() => setShowSearchResults(false)}
+          />
+          {showSearchResults && !!title && (
+            <div className="search-results">
+              {searchResults.length ? (
+                searchResults.map(({ index, title, _id }) => (
+                  <div
+                    className="flex item"
+                    key={_id}
+                  >{`${index}. ${title}`}</div>
+                ))
+              ) : (
+                <div className="empty">No search result.</div>
+              )}
+            </div>
+          )}
+        </div>
         {creationMode !== "SINGLE" && (
           <Fragment>
             <TextArea
