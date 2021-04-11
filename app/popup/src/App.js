@@ -86,7 +86,7 @@ const App = () => {
   const process = (action) => {
     try {
       if (action === "LOAD") {
-        getDataFromStorage(undefined, (state) => {
+        getDataFromStorage(undefined, (state = {}) => {
           console.log("loaded:", state);
           dispatch({ type: constants.SET_KEY, payload: state });
 

@@ -17,7 +17,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { title, content, url, domainUrl } = data || {};
   const searchDbDebounced = useRef();
 
-  const [creationMode, setCreationMode] = useState("QUICK");
+  const [creationMode, setCreationMode] = useState("SITE");
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
@@ -26,8 +26,11 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   }, []);
 
   useEffect(() => {
-    if (creationMode !== "SITE") return;
-    ``;
+    if (creationMode !== "SITE") {
+      handleChange({ url: "", domainUrl: "" });
+      return;
+    }
+
     messenger({ action: "getWebInfo" }, handleChange);
   }, [creationMode]);
 

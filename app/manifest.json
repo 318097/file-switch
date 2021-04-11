@@ -2,12 +2,9 @@
   "name": "Flash",
   "version": "1.0",
   "description": "Quick data addition",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "permissions": [
     "activeTab",

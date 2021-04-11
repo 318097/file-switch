@@ -1,7 +1,7 @@
 import config from "./config";
 
 function messenger(payload, cb) {
-  if (__ENV__ === "APP") {
+  if (__TYPE__ === "EXT") {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) =>
       chrome.tabs.sendMessage(tabs[0].id, payload, cb)
     );
