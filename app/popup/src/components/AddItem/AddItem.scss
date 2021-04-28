@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-
+  flex: 1 1 auto;
   .controls {
     display: flex;
     flex-direction: column;
@@ -41,6 +41,11 @@
       padding: 8px;
       width: 100%;
       box-sizing: border-box;
+    }
+  }
+  .status-bar {
+    .item .value {
+      font-size: 8px;
     }
   }
 }

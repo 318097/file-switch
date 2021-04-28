@@ -1,10 +1,17 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
-import { Button, Radio, TextArea, Input } from "@codedrops/react-ui";
+import colors, {
+  Button,
+  Radio,
+  TextArea,
+  Input,
+  StatusBar,
+} from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
 import { debounce } from "lodash";
 import { constants } from "../../state";
 import { messenger } from "../../utils";
+import config from "../../config";
 
 const CREATION_MODE_OPTIONS = [
   { label: "Single", value: "SINGLE" },
@@ -12,10 +19,13 @@ const CREATION_MODE_OPTIONS = [
   { label: "Website", value: "SITE" },
 ];
 
+const { triggerEvent } = StatusBar;
+
 const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
   const { title, content, url, domain } = data || {};
   const searchDbDebounced = useRef();
+  const statusIds = useRef({});
 
   const [creationMode, setCreationMode] = useState("SITE");
   const [searchResults, setSearchResults] = useState([]);
@@ -23,6 +33,15 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
 
   useEffect(() => {
     searchDbDebounced.current = debounce(searchDb, 3000);
+    triggerEvent(
+      "add",
+      {
+        value: `${config.CONNECTED_TO}`,
+        styles: { background: colors.green },
+        // expires: 3000,
+      }
+      // ({ extra }) => (statusIds.current["server"] = extra)
+    );
   }, []);
 
   useEffect(() => {
@@ -45,10 +64,24 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
         data: [data],
       });
       clearFields();
-      console.log(result);
+
       dispatch({ type: constants.ADD_TO_HISTORY, payload: result });
+      triggerEvent("add", {
+        value: `Success`,
+        styles: {
+          background: colors.green,
+        },
+        expires: 3000,
+      });
     } catch (err) {
       console.log(err);
+      triggerEvent("add", {
+        value: `Error: ${err.message}`,
+        styles: {
+          background: colors.watermelon,
+        },
+        expires: 8000,
+      });
     } finally {
       // dispatch({
       //   type: constants.ADD_TODO,
@@ -113,8 +146,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
           Clear
         </Button>
       </div>
-
-      <div className="controls">
+      <div className="controls mb">
         <div className="flex mb" style={{ position: "relative" }}>
           <Input
             style={{ width: "100%" }}
@@ -183,6 +215,9 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
             Add
           </Button>
         </div>
+      </div>
+      <div style={{ position: "absolute", left: 0, width: "100%", bottom: 0 }}>
+        <StatusBar />
       </div>
     </div>
   );

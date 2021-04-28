@@ -13,6 +13,11 @@ const config = {
   IS_LOCAL_STORAGE: __TYPE__ === "APP",
   DEFAULT_STATE: __TYPE__ === "APP",
   STATE_KEY: "flash",
+  CONNECTED_TO: isProd
+    ? "PROD"
+    : connectionSource === "LAMBDA"
+    ? "LAMBDA"
+    : "LOCAL",
   // TOKEN: process.env.TOKEN,
 };
 
