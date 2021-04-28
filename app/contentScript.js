@@ -4,8 +4,8 @@ chrome.runtime.onMessage.addListener(
       case "getWebInfo":
         senderResponse({
           title: document.title,
-          url: window.location.href,
-          domainUrl: window.location.hostname,
+          url: window.location.href, // full url
+          domain: window.location.hostname, // domain name
         });
         break;
       case "log":

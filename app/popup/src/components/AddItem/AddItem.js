@@ -14,7 +14,7 @@ const CREATION_MODE_OPTIONS = [
 
 const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
-  const { title, content, url, domainUrl } = data || {};
+  const { title, content, url, domain } = data || {};
   const searchDbDebounced = useRef();
 
   const [creationMode, setCreationMode] = useState("SITE");
@@ -27,7 +27,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
 
   useEffect(() => {
     if (creationMode !== "SITE") {
-      handleChange({ url: "", domainUrl: "" });
+      handleChange({ url: "", domain: "" });
       return;
     }
 
@@ -156,17 +156,18 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
               rows={5}
             />
             <Input
+              autoComplete="off"
               className="input mb"
               value={url}
               name="url"
               onChange={(e, value) => handleChange(value)}
               placeholder="URL"
             />
-            {creationMode === "SITE" && !!domainUrl && (
+            {creationMode === "SITE" && !!domain && (
               <Input
                 className="input mb"
-                value={domainUrl}
-                name="domainUrl"
+                value={domain}
+                name="domain"
                 disabled
                 placeholder="Domain URL"
               />

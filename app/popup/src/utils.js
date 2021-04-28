@@ -9,7 +9,7 @@ function messenger(payload, cb) {
     cb({
       title: document.title,
       url: window.location.href,
-      domainUrl: window.location.hostname,
+      domain: window.location.hostname,
     });
 }
 

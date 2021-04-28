@@ -2,7 +2,8 @@ export const initialData = {
   title: "",
   content: "",
   url: "",
-  domainUrl: "",
+  domain: "",
+  status: "QUICK_ADD",
 };
 
 export const initialState = {
