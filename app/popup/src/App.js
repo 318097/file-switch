@@ -12,7 +12,7 @@ import History from "./components/History";
 import Auth from "./components/Auth";
 import AddItem from "./components/AddItem";
 
-axios.defaults.baseURL = config.FUNCTIONS_URL;
+axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 

@@ -39,14 +39,14 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
     try {
       if (!activeCollectionId) return;
 
-      const result = await axios.post(
-        `/create-post-v2?collectionId=${activeCollectionId}`,
-        {
-          data: [data],
-        }
-      );
+      const {
+        data: { result },
+      } = await axios.post(`/posts?collectionId=${activeCollectionId}`, {
+        data: [data],
+      });
       clearFields();
-      dispatch({ type: constants.ADD_TO_HISTORY, payload: result.data });
+      console.log(result);
+      dispatch({ type: constants.ADD_TO_HISTORY, payload: result });
     } catch (err) {
       console.log(err);
     } finally {
@@ -84,7 +84,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
     try {
       setAppLoading(true);
       const result = await axios.get(
-        `/get-posts?collectionId=${activeCollectionId}`,
+        `/posts?collectionId=${activeCollectionId}`,
         {
           params: {
             search: value.title,
@@ -175,7 +175,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
         )}
         <div>
           <Button
-            disable={appLoading || !activeCollectionId}
+            disabled={appLoading || !activeCollectionId}
             className="btn"
             onClick={add}
           >

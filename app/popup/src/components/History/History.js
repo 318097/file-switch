@@ -18,9 +18,9 @@ const History = ({ state, dispatch, setAppLoading }) => {
 
   return (
     <section id="history">
-      {history.map(({ index, title, createdAt }) => {
+      {history.map(({ index, title, createdAt, _id }) => {
         return (
-          <div className="flex column item">
+          <div className="flex column item" key={_id}>
             <div className="flex">{`${index}. ${title}`}</div>
             <div className="flex date">{`Created: ${moment(createdAt).format(
               "DD, MMM"
