@@ -56,7 +56,14 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const add = async () => {
     setAppLoading(true);
     try {
-      if (!activeCollectionId) return;
+      if (!data.title)
+        return triggerEvent("add", {
+          value: `Error: Title is required`,
+          styles: {
+            background: colors.watermelon,
+          },
+          expires: 3000,
+        });
 
       const {
         data: { result },

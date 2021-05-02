@@ -43,22 +43,15 @@ const App = () => {
     state.history,
   ]);
 
-  // const isAccountActive = async (token) => {
-  //   try {
-  //     axios.defaults.headers.common["authorization"] = token;
+  const isAccountActive = async (token) => {
+    axios.defaults.headers.common["authorization"] = token;
 
-  //     const { data } = await axios.post(`/auth/account-status`);
-  //     dispatch({
-  //       type: constants.SET_SESSION,
-  //       payload: { ...data, isLoggedIn: true, token },
-  //     });
-  //   } catch (err) {
-  //     logout();
-  //     console.log("Error: ", err);
-  //   } finally {
-  //     setTimeout(() => setLoading(false), 500);
-  //   }
-  // };
+    const { data } = await axios.post(`/auth/account-status`);
+    dispatch({
+      type: constants.SET_SESSION,
+      payload: { ...data, isLoggedIn: true, token },
+    });
+  };
 
   const setActivePage = (page) =>
     dispatch({
@@ -86,25 +79,29 @@ const App = () => {
   const process = (action) => {
     try {
       if (action === "LOAD") {
-        getDataFromStorage(undefined, (state = {}) => {
-          console.log("loaded:", state);
-          dispatch({ type: constants.SET_KEY, payload: state });
+        getDataFromStorage(undefined, async (state = {}) => {
+          try {
+            console.log("loaded:", state);
+            dispatch({ type: constants.SET_KEY, payload: state });
 
-          const { session } = state;
-          const { token } = session || {};
+            const { session } = state;
+            const { token } = session || {};
 
-          let activeTab;
-          if (token) {
-            axios.defaults.headers.common["authorization"] = token;
-            activeTab = "HOME";
-          } else {
-            activeTab = "AUTH";
+            let activeTab;
+            if (token) {
+              await isAccountActive(token);
+              axios.defaults.headers.common["authorization"] = token;
+              activeTab = "HOME";
+            } else {
+              activeTab = "AUTH";
+            }
+            dispatch({
+              type: constants.SET_ACTIVE_PAGE,
+              payload: activeTab,
+            });
+          } catch (err) {
+            logout();
           }
-          dispatch({
-            type: constants.SET_ACTIVE_PAGE,
-            payload: activeTab,
-          });
-          // else isAccountActive(token);
         });
       } else {
         console.log("saved:", state);
