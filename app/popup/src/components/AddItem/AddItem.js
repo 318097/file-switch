@@ -25,32 +25,24 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
   const { title, content, url, domain } = data || {};
   const searchDbDebounced = useRef();
-  const statusIds = useRef({});
 
-  const [creationMode, setCreationMode] = useState("SITE");
+  const [creationMode, setCreationMode] = useState("QUICK");
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
     searchDbDebounced.current = debounce(searchDb, 3000);
-    triggerEvent(
-      "add",
-      {
-        value: `${config.CONNECTED_TO}`,
-        styles: { background: colors.green },
-        // expires: 3000,
-      }
-      // ({ extra }) => (statusIds.current["server"] = extra)
-    );
+    triggerEvent("add", {
+      value: `${config.CONNECTED_TO}`,
+      styles: { background: colors.green },
+      // expires: 3000,
+    });
   }, []);
 
   useEffect(() => {
-    if (creationMode !== "SITE") {
-      handleChange({ url: "", domain: "" });
-      return;
-    }
-
-    messenger({ action: "getWebInfo" }, handleChange);
+    if (creationMode === "SITE")
+      messenger({ action: "getWebInfo" }, handleChange);
+    else handleChange({ url: "", domain: "" });
   }, [creationMode]);
 
   const add = async () => {
