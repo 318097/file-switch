@@ -58,7 +58,7 @@ export const reducer = (state, action) => {
     case constants.ADD_TO_HISTORY:
       return {
         ...state,
-        history: [...state.history, ...action.payload],
+        history: [...action.payload, ...state.history],
       };
     case constants.SET_KEY:
       return {

@@ -31,7 +31,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
-    searchDbDebounced.current = debounce(searchDb, 3000);
+    searchDbDebounced.current = debounce(searchDb, 500);
     triggerEvent("add", {
       value: `${config.CONNECTED_TO}`,
       styles: { background: colors.green },
