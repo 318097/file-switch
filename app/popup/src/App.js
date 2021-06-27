@@ -145,24 +145,6 @@ const AppContent = ({
 
   const Controls = () => {
     switch (activePage) {
-      case "HOME":
-        const options = Object.entries(
-          _.get(state, "session.notesApp", {})
-        ).map(([id, config]) => ({
-          value: id,
-          label: _.get(config, "name", ""),
-        }));
-        return (
-          <Select
-            style={{ width: "max-content" }}
-            options={options}
-            placeholder="Collection"
-            value={activeCollectionId}
-            onChange={(e, activeCollectionId) =>
-              dispatch({ type: "SET_KEY", payload: { activeCollectionId } })
-            }
-          />
-        );
       case "SETTINGS":
         return (
           <Button className="btn" onClick={logout}>

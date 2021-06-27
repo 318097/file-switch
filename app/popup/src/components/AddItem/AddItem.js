@@ -132,9 +132,27 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
     }
   };
 
+  const options = Object.entries(_.get(state, "session.notesApp", {})).map(
+    ([id, config]) => ({
+      value: id,
+      label: _.get(config, "name", ""),
+    })
+  );
+
   return (
     <div className="add-container">
-      <div className="options flex mb">
+      <div className="flex mb">
+        <Radio
+          options={options}
+          placeholder="Collection"
+          value={activeCollectionId}
+          onChange={(e, activeCollectionId) =>
+            dispatch({ type: "SET_KEY", payload: { activeCollectionId } })
+          }
+        />
+      </div>
+
+      <div className="flex mb">
         <Radio
           options={CREATION_MODE_OPTIONS}
           value={creationMode}
@@ -216,7 +234,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
         </div>
       </div>
       <div style={{ position: "absolute", left: 0, width: "100%", bottom: 0 }}>
-        <StatusBar />
+        <StatusBar style={{ background: "none" }} />
       </div>
     </div>
   );

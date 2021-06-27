@@ -20,7 +20,6 @@ const config = {
   DEFAULT_STATE: __TYPE__ === "APP",
   STATE_KEY: "flash",
   CONNECTED_TO: isProd ? "LAMBDA" : "LOCAL",
-  // TOKEN: process.env.TOKEN,
 };
 
 export default config;
