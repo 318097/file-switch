@@ -8,7 +8,9 @@
     "dev:app": "webpack-dev-server --env.NODE_ENV=development --env.MODE=app",
     "dev:ext": "webpack --env.NODE_ENV=development --env.MODE=ext",
     "build:app": "webpack-dev-server --env.NODE_ENV=production --env.MODE=app",
-    "build:ext": "webpack --env.NODE_ENV=production --env.MODE=ext"
+    "build:ext": "webpack --env.NODE_ENV=production --env.MODE=ext",
+    "lint": "eslint --ext js,jsx app/popup/",
+    "fix": "eslint --fix app/popup/"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.0",
@@ -32,6 +34,10 @@
     "@svgr/webpack": "^5.2.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.4.2",
+    "eslint": "^7.31.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^5.1.0",
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.13.1",

@@ -1,5 +1,4 @@
 import moment from "moment";
-import config from "./config";
 
 const formatDate = (date) => moment(date).format("DD MMM, YY");
 

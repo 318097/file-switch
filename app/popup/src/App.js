@@ -1,8 +1,8 @@
-import React, { useState, useReducer, useEffect, useRef } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import "./App.scss";
-import { Card, Icon, Button, Select } from "@codedrops/react-ui";
+import { Card, Button } from "@codedrops/react-ui";
 import axios from "axios";
-import _ from "lodash";
+// import _ from "lodash";
 import config from "./config";
 import { constants, reducer, initialState } from "./state";
 import { getDataFromStorage, setDataInStorage } from "./utils";
@@ -140,7 +140,7 @@ const AppContent = ({
   setAppLoading,
   logout,
 }) => {
-  const { activePage, activeCollectionId, session } = state;
+  const { activePage, session } = state;
   const { token } = session || {};
 
   const Controls = () => {

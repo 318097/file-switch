@@ -1,19 +1,8 @@
-import React, { useEffect, useState, Fragment } from "react";
-import colors, {
-  Card,
-  Icon,
-  Button,
-  Radio,
-  Input,
-  Select,
-} from "@codedrops/react-ui";
-import _ from "lodash";
-import axios from "axios";
+import React from "react";
 import "./History.scss";
-import config from "../../config";
 import moment from "moment";
 
-const History = ({ state, dispatch, setAppLoading }) => {
+const History = ({ state }) => {
   const { history } = state;
 
   return (

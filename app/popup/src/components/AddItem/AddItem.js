@@ -8,7 +8,7 @@ import colors, {
 } from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
-import { debounce } from "lodash";
+import _ from "lodash";
 import { constants } from "../../state";
 import { messenger } from "../../utils";
 import config from "../../config";
@@ -31,7 +31,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
-    searchDbDebounced.current = debounce(searchDb, 500);
+    searchDbDebounced.current = _.debounce(searchDb, 500);
     triggerEvent("add", {
       value: `${config.CONNECTED_TO}`,
       styles: { background: colors.green },

@@ -1,20 +1,9 @@
-import React, { useEffect, useState, Fragment } from "react";
-import colors, {
-  Card,
-  Icon,
-  Button,
-  Radio,
-  Input,
-  Select,
-} from "@codedrops/react-ui";
-import _ from "lodash";
-import axios from "axios";
+import React from "react";
 import "./Settings.scss";
-import config from "../../config";
 
-const Settings = ({ state, dispatch, setAppLoading }) => {
-  const [projectName, setProjectName] = useState("");
-  const { activeCollectionId, session = {}, topics = [], appLoading } = state;
+const Settings = ({ state }) => {
+  // const [projectName, setProjectName] = useState("");
+  const { session = {} } = state;
   const { username, name, email } = session || {};
 
   return (
