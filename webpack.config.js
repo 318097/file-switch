@@ -3,13 +3,16 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
 module.exports = (env) => {
-  console.log(`[App]: Running in ${env.NODE_ENV} mode.`);
-  const nodeEnv = (env.NODE_ENV || "").toUpperCase();
-  const appMode = (env.MODE || "").toUpperCase();
+  const { NODE_ENV, MODE } = env;
+  console.log(
+    `[App]: Processing '${NODE_ENV}' environment for '${MODE}' mode.`
+  );
+
+  const watch = MODE === "ext" && NODE_ENV === "development";
   return {
-    watch: appMode === "EXT" && nodeEnv === "DEVELOPMENT",
+    watch,
     entry: "./app/popup/index.js",
-    mode: "development",
+    mode: NODE_ENV,
     devtool: "cheap-module-source-map",
     output: {
       path: path.resolve(__dirname, "app/build"),
@@ -50,8 +53,8 @@ module.exports = (env) => {
     plugins: [
       new HtmlWebpackPlugin({ template: "./app/popup/index.html" }),
       new webpack.DefinePlugin({
-        __TYPE__: JSON.stringify(appMode),
-        __ENV__: JSON.stringify(nodeEnv),
+        __TYPE__: JSON.stringify(MODE),
+        __ENV__: JSON.stringify(NODE_ENV),
       }),
     ],
   };

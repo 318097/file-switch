@@ -1,6 +1,6 @@
 console.log("CONFIG:", __TYPE__, __ENV__);
 
-const isProd = __ENV__ === "PRODUCTION";
+const isProd = __ENV__ === "production";
 
 const getServerURL = ({ isProd = false, serverType = "lambda" } = {}) => {
   const connectToLambda = serverType === "lambda";
@@ -16,8 +16,8 @@ const getServerURL = ({ isProd = false, serverType = "lambda" } = {}) => {
 
 const config = {
   SERVER_URL: getServerURL({ isProd }),
-  IS_LOCAL_STORAGE: __TYPE__ === "APP",
-  DEFAULT_STATE: __TYPE__ === "APP",
+  IS_LOCAL_STORAGE: __TYPE__ === "app",
+  DEFAULT_STATE: __TYPE__ === "app",
   STATE_KEY: "flash",
   CONNECTED_TO: isProd ? "LAMBDA" : "LOCAL",
 };
