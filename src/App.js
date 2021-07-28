@@ -5,7 +5,7 @@ import axios from "axios";
 // import _ from "lodash";
 import config from "./config";
 import { constants, reducer, initialState } from "./state";
-import { getDataFromStorage, setDataInStorage } from "./lib/utils";
+import { getDataFromStorage, setDataInStorage } from "./lib/storage";
 
 import Settings from "./components/Settings";
 import History from "./components/History";
@@ -73,13 +73,13 @@ const App = () => {
     setActivePage("AUTH");
     setAppLoading(false);
     setLoading(false);
-    setDataInStorage(undefined, initialState);
+    setDataInStorage(initialState);
   };
 
   const process = (action) => {
     try {
       if (action === "LOAD") {
-        getDataFromStorage(undefined, async (state = {}) => {
+        getDataFromStorage(async (state = {}) => {
           try {
             console.log("loaded:", state);
             dispatch({ type: constants.SET_KEY, payload: state });
@@ -106,7 +106,7 @@ const App = () => {
       } else {
         console.log("saved:", state);
         delete state.appLoading;
-        setDataInStorage(undefined, state);
+        setDataInStorage(state);
       }
     } catch (err) {
       console.log("Error: ", err);
