@@ -3,6 +3,7 @@ import { Button, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./Auth.scss";
 import { constants } from "../../state";
+import handleError from "../../lib/errorHandling";
 
 const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
   const [data, setData] = useState({ username: "", password: "" });
@@ -20,7 +21,8 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
       });
       setActivePage("HOME");
       axios.defaults.headers.common["authorization"] = result.token;
-    } catch (err) {
+    } catch (error) {
+      handleError(error);
     } finally {
       setAppLoading(false);
     }
@@ -46,7 +48,7 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
           onChange={(_, value) => setInputData(value)}
         />
         <div className="button-wrapper">
-          <Button onClick={handleAuth} className="btn" disabled={appLoading}>
+          <Button onClick={handleAuth} disabled={appLoading}>
             Login
           </Button>
         </div>

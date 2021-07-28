@@ -1,47 +1,38 @@
 import React, { useState, useReducer, useEffect } from "react";
 import "./App.scss";
-import { Card, Button } from "@codedrops/react-ui";
+import { Card } from "@codedrops/react-ui";
 import axios from "axios";
-// import _ from "lodash";
+import _ from "lodash";
 import config from "./config";
 import { constants, reducer, initialState } from "./state";
 import { getDataFromStorage, setDataInStorage } from "./lib/storage";
-
+import handleError from "./lib/errorHandling";
 import Settings from "./components/Settings";
 import History from "./components/History";
 import Auth from "./components/Auth";
 import AddItem from "./components/AddItem";
+import Header from "./components/Header";
 
 axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const NAV_ITEMS = (isAuthenticated) =>
-  [
-    { label: "HOME", visible: isAuthenticated },
-    { label: "SETTINGS", visible: isAuthenticated },
-    { label: "HISTORY", visible: isAuthenticated },
-    { label: "AUTH", visible: !isAuthenticated },
-  ].filter((item) => item.visible);
+const KEYS_TO_SAVE = ["session", "activeCollectionId", "activePage", "history"];
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
+  const [initLoading, setInitLoading] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const { appLoading, session, activeCollectionId, activePage, history } =
+    state;
+
   useEffect(() => {
-    process("LOAD");
+    load();
   }, []);
 
   useEffect(() => {
-    if (loading) return;
-
-    process("SAVE");
-  }, [
-    state.session,
-    state.activeCollectionId,
-    state.activePage,
-    state.history,
-  ]);
+    save();
+  }, [session, activeCollectionId, activePage, history]);
 
   const isAccountActive = async (token) => {
     axios.defaults.headers.common["authorization"] = token;
@@ -72,120 +63,62 @@ const App = () => {
     });
     setActivePage("AUTH");
     setAppLoading(false);
-    setLoading(false);
+    setInitLoading(false);
     setDataInStorage(initialState);
   };
 
-  const process = (action) => {
-    try {
-      if (action === "LOAD") {
-        getDataFromStorage(async (state = {}) => {
-          try {
-            console.log("loaded:", state);
-            dispatch({ type: constants.SET_KEY, payload: state });
-
-            const { session } = state;
-            const { token } = session || {};
-
-            let activeTab;
-            if (token) {
-              await isAccountActive(token);
-              axios.defaults.headers.common["authorization"] = token;
-              activeTab = "HOME";
-            } else {
-              activeTab = "AUTH";
-            }
-            dispatch({
-              type: constants.SET_ACTIVE_PAGE,
-              payload: activeTab,
-            });
-          } catch (err) {
-            logout();
-          }
+  const load = () => {
+    getDataFromStorage(async (state = {}) => {
+      try {
+        // console.log("loaded:", state);
+        dispatch({ type: constants.SET_KEY, payload: state });
+        const token = _.get(state, "session.token");
+        let activeTab = "AUTH";
+        if (token) {
+          await isAccountActive(token);
+          axios.defaults.headers.common["authorization"] = token;
+          activeTab = "HOME";
+        }
+        dispatch({
+          type: constants.SET_ACTIVE_PAGE,
+          payload: activeTab,
         });
-      } else {
-        console.log("saved:", state);
-        delete state.appLoading;
-        setDataInStorage(state);
+      } catch (error) {
+        handleError(error);
+        logout();
+      } finally {
+        setInitLoading(false);
       }
-    } catch (err) {
-      console.log("Error: ", err);
-    } finally {
-      setTimeout(() => setLoading(false), 500);
-    }
+    });
   };
 
-  const { appLoading } = state;
-
-  return (
-    <div className="react-ui dot-container">
-      <AppContent
-        loading={loading}
-        state={state}
-        dispatch={dispatch}
-        setActivePage={setActivePage}
-        setAppLoading={setAppLoading}
-        logout={logout}
-      />
-      {(loading || appLoading) && <div className="loader" />}
-    </div>
-  );
-};
-
-const AppContent = ({
-  loading,
-  state,
-  dispatch,
-  setActivePage,
-  setAppLoading,
-  logout,
-}) => {
-  const { activePage, session } = state;
-  const { token } = session || {};
-
-  const Controls = () => {
-    switch (activePage) {
-      case "SETTINGS":
-        return (
-          <Button className="btn" onClick={logout}>
-            Logout
-          </Button>
-        );
-      default:
-        return null;
-    }
+  const save = () => {
+    if (initLoading || appLoading) return;
+    const dataToSave = _.pick(state, KEYS_TO_SAVE);
+    setDataInStorage(dataToSave);
   };
 
   return (
-    <Card className="card app-content">
-      <div className="header mb">
-        <nav>
-          {NAV_ITEMS(!!token).map(({ label }) => (
-            <span
-              key={label}
-              className={`nav-item ${
-                activePage === label ? "active-page" : ""
-              }`}
-              onClick={() => setActivePage(label)}
-            >
-              {label}
-            </span>
-          ))}
-        </nav>
-        <div className="extra-controls">
-          <Controls />
-        </div>
-      </div>
-      {!loading && (
-        <ActivePage
+    <div className="react-ui flash-container">
+      <Card hover={false} className="app-content">
+        <Header
+          logout={logout}
           state={state}
-          dispatch={dispatch}
           activePage={activePage}
           setActivePage={setActivePage}
-          setAppLoading={setAppLoading}
         />
-      )}
-    </Card>
+        {!initLoading && (
+          <ActivePage
+            state={state}
+            dispatch={dispatch}
+            activePage={activePage}
+            setActivePage={setActivePage}
+            setAppLoading={setAppLoading}
+          />
+        )}
+      </Card>
+      {(initLoading || appLoading) && <div className="loader" />}
+    </div>
   );
 };
 

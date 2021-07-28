@@ -5,31 +5,22 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  gap: 8px;
   .controls {
     display: flex;
     flex-direction: column;
-
-    .inputbox {
-      flex: 1 1 auto;
-      padding: 4px 8px;
-      resize: none;
-      font-family: "Fira Mono", Cascadia-Regular, monospace;
-      font-weight: 500;
-    }
+    gap: 8px;
   }
   .search-results {
-    position: absolute;
     background: $strokeOne;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    top: calc(100% + 4px);
-    left: 0;
     width: 100%;
     overflow: auto;
-    max-height: 150px;
+    max-height: 50px;
     border: 1px solid $feather;
     .empty {
       padding: 12px 0;

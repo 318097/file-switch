@@ -1,16 +1,12 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
-import colors, {
-  Button,
-  Radio,
-  TextArea,
-  Input,
-  StatusBar,
-} from "@codedrops/react-ui";
+import { Button, Radio, TextArea, Input, StatusBar } from "@codedrops/react-ui";
 import axios from "axios";
 import "./AddItem.scss";
 import _ from "lodash";
 import { constants } from "../../state";
 import { messenger } from "../../lib/storage";
+import notify from "../../lib/notify";
+import handleError from "../../lib/errorHandling";
 import config from "../../config";
 
 const CREATION_MODE_OPTIONS = [
@@ -18,8 +14,6 @@ const CREATION_MODE_OPTIONS = [
   { label: "Quick", value: "QUICK" },
   { label: "Website", value: "SITE" },
 ];
-
-const { triggerEvent } = StatusBar;
 
 const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
@@ -32,11 +26,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
 
   useEffect(() => {
     searchDbDebounced.current = _.debounce(searchDb, 500);
-    triggerEvent("add", {
-      value: `${config.CONNECTED_TO}`,
-      styles: { background: colors.green },
-      // expires: 3000,
-    });
+    notify(config.CONNECTED_TO);
   }, []);
 
   useEffect(() => {
@@ -48,14 +38,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const add = async () => {
     setAppLoading(true);
     try {
-      if (!data.title)
-        return triggerEvent("add", {
-          value: `Error: Title is required`,
-          styles: {
-            background: colors.watermelon,
-          },
-          expires: 3000,
-        });
+      if (!data.title) return notify(`Error: Title is required`);
 
       const {
         data: { result },
@@ -63,29 +46,11 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
         data: [data],
       });
       clearFields();
-
       dispatch({ type: constants.ADD_TO_HISTORY, payload: result });
-      triggerEvent("add", {
-        value: `Success`,
-        styles: {
-          background: colors.green,
-        },
-        expires: 3000,
-      });
-    } catch (err) {
-      console.log(err);
-      triggerEvent("add", {
-        value: `Error: ${err.message}`,
-        styles: {
-          background: colors.watermelon,
-        },
-        expires: 8000,
-      });
+      notify(`Success`);
+    } catch (error) {
+      handleError(error);
     } finally {
-      // dispatch({
-      //   type: constants.ADD_TODO,
-      //   payload: result,
-      // });
       setAppLoading(false);
     }
   };
@@ -125,8 +90,8 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
       );
       setSearchResults(result.data.posts);
       setShowSearchResults(true);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      handleError(error);
     } finally {
       setAppLoading(false);
     }
@@ -141,72 +106,64 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
 
   return (
     <div className="add-container">
-      <div className="flex mb">
-        <Radio
-          options={options}
-          placeholder="Collection"
-          value={activeCollectionId}
-          onChange={(e, activeCollectionId) =>
-            dispatch({ type: "SET_KEY", payload: { activeCollectionId } })
-          }
-        />
-      </div>
+      <Radio
+        options={options}
+        placeholder="Collection"
+        value={activeCollectionId}
+        onChange={(e, activeCollectionId) =>
+          dispatch({ type: "SET_KEY", payload: { activeCollectionId } })
+        }
+      />
 
-      <div className="flex mb">
+      <div className="flex">
         <Radio
           options={CREATION_MODE_OPTIONS}
           value={creationMode}
           onChange={(e, value) => setCreationMode(value)}
-          className="radio mr"
         />
-        <Button className="btn" onClick={clearFields}>
+        <Button color="blue" type="link" onClick={clearFields}>
           Clear
         </Button>
       </div>
-      <div className="controls mb">
-        <div className="flex mb" style={{ position: "relative" }}>
-          <Input
-            style={{ width: "100%" }}
-            className="input"
-            value={title}
-            name="title"
-            autoComplete="off"
-            onChange={(e, value) => {
-              handleChange(value);
-              searchDbDebounced.current(value);
-            }}
-            placeholder="Title"
-            autoFocus
-            onBlur={() => setShowSearchResults(false)}
-          />
-          {showSearchResults && !!title && (
-            <div className="search-results">
-              {searchResults.length ? (
-                searchResults.map(({ index, title, _id }) => (
-                  <div
-                    className="flex item"
-                    key={_id}
-                  >{`${index}. ${title}`}</div>
-                ))
-              ) : (
-                <div className="empty">No search result.</div>
-              )}
-            </div>
-          )}
-        </div>
+
+      <div className="controls">
+        <Input
+          value={title}
+          name="title"
+          autoComplete="off"
+          onChange={(e, value) => {
+            handleChange(value);
+            // searchDbDebounced.current(value);
+          }}
+          placeholder="Title"
+          autoFocus
+          onBlur={() => setShowSearchResults(false)}
+        />
+        {/* {showSearchResults && !!title && (
+          <div className="search-results">
+            {searchResults.length ? (
+              searchResults.map(({ index, title, _id }) => (
+                <div
+                  className="flex item"
+                  key={_id}
+                >{`${index}. ${title}`}</div>
+              ))
+            ) : (
+              <div className="empty">No search result.</div>
+            )}
+          </div>
+        )} */}
         {creationMode !== "SINGLE" && (
           <Fragment>
             <TextArea
               value={content}
               name="content"
               onChange={(e, value) => handleChange(value)}
-              className="inputbox mb"
               placeholder="Content.."
               rows={5}
             />
             <Input
               autoComplete="off"
-              className="input mb"
               value={url}
               name="url"
               onChange={(e, value) => handleChange(value)}
@@ -214,7 +171,6 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
             />
             {creationMode === "SITE" && !!domain && (
               <Input
-                className="input mb"
                 value={domain}
                 name="domain"
                 disabled
@@ -224,11 +180,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
           </Fragment>
         )}
         <div>
-          <Button
-            disabled={appLoading || !activeCollectionId}
-            className="btn"
-            onClick={add}
-          >
+          <Button disabled={appLoading || !activeCollectionId} onClick={add}>
             Add
           </Button>
         </div>

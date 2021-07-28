@@ -1,16 +1,18 @@
 @import "@codedrops/react-ui/dist/styles/colors.scss";
 @import "@codedrops/react-ui/dist/styles/custom-styles.scss";
 
-html body {
-  margin: 0;
+html {
+  body {
+    margin: 0;
+  }
 }
 
-.dot-container * {
+.flash-container * {
   font-family: "Fira Mono", Cascadia-Regular, monospace;
   font-size: 12px;
 }
 
-.dot-container {
+.flash-container {
   position: relative;
   display: inline-block;
 
@@ -21,31 +23,30 @@ html body {
     animation: 2s progress linear infinite;
     width: 100%;
     height: 4px;
-    background: $coffee;
+    background: $orchid;
     z-index: 10;
   }
 
   @keyframes progress {
     0% {
-      background: $coffee;
+      background: $orchid;
     }
     25% {
-      background: $yellow;
+      background: $blue;
     }
     50% {
-      background: $orange;
+      background: $cdBlue;
     }
     75% {
-      background: $primary;
+      background: $nbPink;
     }
     100% {
-      background: $orchid;
+      background: $watermelon;
     }
   }
 
   .card.app-content {
-    border-radius: 0;
-    height: 360px;
+    height: 400px;
     width: 400px;
     background: $feather;
     display: flex;
@@ -55,25 +56,10 @@ html body {
     overflow: visible;
     border: none;
     box-shadow: none;
-    &:hover {
-      background: $feather;
-    }
-    // .project-name {
-    //   position: absolute;
-    //   right: -8px;
-    //   bottom: -16px;
-    //   font-size: 10px;
-    //   text-transform: uppercase;
-    //   font-family: "Fira Mono", Cascadia-Bold, monospace;
-    //   font-weight: 700;
-    //   z-index: 10;
-    //   border-color: $chrome;
-    // }
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      text-transform: uppercase;
       color: $bar;
       flex: 0 0 30px;
       nav {
@@ -81,9 +67,9 @@ html body {
         align-items: center;
         position: relative;
         z-index: 10;
+        gap: 10px;
         .nav-item {
           color: $steel;
-          margin-right: 8px;
           cursor: pointer;
           font-family: "Fira Mono", Cascadia-Bold, monospace;
           font-weight: 700;
@@ -104,72 +90,17 @@ html body {
       display: flex;
       flex-direction: column;
     }
-
-    /* width */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      background: #888;
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
   }
 
-  .btn,
-  .inp,
-  .confirm-box-title,
-  .confirm-box-actions .btn,
+  .button,
   .radio .radio-item,
   .select-text,
   .dropdown .dropdown-item,
-  .inputbox,
   .checkbox,
   .input,
+  .textarea,
   .card {
-    font-size: 12px !important;
-  }
-
-  .timeline {
-    width: 96%;
-    margin: 0 1% 8px 3%;
-    .card {
-      height: auto;
-    }
-  }
-
-  .confirm-box-container {
-    padding: 4px 6px;
-    margin-top: 2px;
-  }
-
-  .empty-message {
-    text-align: center;
-    opacity: 0.4;
-    font-size: 2.4em;
-    font-family: "Fira Mono", Cascadia-Bold, monospace;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-top: 12px;
-  }
-  .empty-todo-list {
-    text-align: center;
-    opacity: 0.4;
-    font-size: 1.2em;
-    font-family: "Fira Mono", Cascadia-Bold, monospace;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin: 12px;
+    font-size: 12px;
   }
 }
 

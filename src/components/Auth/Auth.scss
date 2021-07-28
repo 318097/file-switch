@@ -2,7 +2,6 @@
 
 section#auth {
   .container {
-    // background: $feather;
     padding: 20px;
     width: max-content;
     margin: 20px auto 0;
@@ -10,10 +9,6 @@ section#auth {
     flex-direction: column;
     align-items: center;
     position: relative;
-    .inp {
-      margin: 3px 0;
-    }
-
     .button-wrapper {
       display: flex;
       align-items: center;
