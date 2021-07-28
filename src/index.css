@@ -1,0 +1,14 @@
+@font-face {
+  src: url("./assets/fonts/Cascadia/CascadiaMono-Regular.otf");
+  font-family: Cascadia-Regular;
+}
+
+@font-face {
+  src: url("./assets/fonts/Cascadia/CascadiaMono-Bold.otf");
+  font-family: Cascadia-Bold;
+}
+
+@font-face {
+  src: url("./assets/fonts/Cascadia/CascadiaMono-SemiBold.otf");
+  font-family: Cascadia-SemiBold;
+}

@@ -5,7 +5,7 @@ import axios from "axios";
 // import _ from "lodash";
 import config from "./config";
 import { constants, reducer, initialState } from "./state";
-import { getDataFromStorage, setDataInStorage } from "./utils";
+import { getDataFromStorage, setDataInStorage } from "./lib/utils";
 
 import Settings from "./components/Settings";
 import History from "./components/History";
@@ -16,12 +16,12 @@ axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const NAV_ITEMS = (isLoggedIn) =>
+const NAV_ITEMS = (isAuthenticated) =>
   [
-    { label: "HOME", visible: isLoggedIn },
-    { label: "SETTINGS", visible: isLoggedIn },
-    { label: "HISTORY", visible: isLoggedIn },
-    { label: "AUTH", visible: !isLoggedIn },
+    { label: "HOME", visible: isAuthenticated },
+    { label: "SETTINGS", visible: isAuthenticated },
+    { label: "HISTORY", visible: isAuthenticated },
+    { label: "AUTH", visible: !isAuthenticated },
   ].filter((item) => item.visible);
 
 const App = () => {
@@ -49,7 +49,7 @@ const App = () => {
     const { data } = await axios.post(`/auth/account-status`);
     dispatch({
       type: constants.SET_SESSION,
-      payload: { ...data, isLoggedIn: true, token },
+      payload: { ...data, isAuthenticated: true, token },
     });
   };
 

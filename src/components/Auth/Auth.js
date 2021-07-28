@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Input } from "@codedrops/react-ui";
 import axios from "axios";
 import "./Auth.scss";
 import { constants } from "../../state";
-// import config from "../../config";
 
 const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
   const [data, setData] = useState({ username: "", password: "" });
   const { appLoading } = state;
-
-  useEffect(() => {}, []);
 
   const setInputData = (update) => setData((prev) => ({ ...prev, ...update }));
 
@@ -19,9 +16,10 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
       const { data: result } = await axios.post(`/auth/login`, data);
       dispatch({
         type: constants.SET_SESSION,
-        payload: { ...result, isLoggedIn: true },
+        payload: { ...result, isAuthenticated: true },
       });
       setActivePage("HOME");
+      axios.defaults.headers.common["authorization"] = result.token;
     } catch (err) {
     } finally {
       setAppLoading(false);

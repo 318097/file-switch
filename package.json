@@ -8,12 +8,13 @@
     "dev:app": "webpack server --env NODE_ENV=development MODE=app",
     "dev:ext": "webpack --env NODE_ENV=development MODE=ext",
     "build:ext": "webpack --env NODE_ENV=production MODE=ext",
-    "lint": "eslint --ext js,jsx app/popup/",
-    "fix": "eslint --fix app/popup/"
+    "lint": "eslint --ext js,jsx src/",
+    "fix": "eslint --fix src/"
   },
   "dependencies": {
     "@babel/runtime": "^7.14.6",
-    "@codedrops/react-ui": "^3.0.13",
+    "@codedrops/lib": "^0.0.32",
+    "@codedrops/react-ui": "^3.0.14",
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "lodash": "^4.17.21",

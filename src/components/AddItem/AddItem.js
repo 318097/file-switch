@@ -10,7 +10,7 @@ import axios from "axios";
 import "./AddItem.scss";
 import _ from "lodash";
 import { constants } from "../../state";
-import { messenger } from "../../utils";
+import { messenger } from "../../lib/utils";
 import config from "../../config";
 
 const CREATION_MODE_OPTIONS = [

@@ -11,15 +11,15 @@ module.exports = (env) => {
   const watch = MODE === "ext" && NODE_ENV === "development";
   return {
     watch,
-    entry: "./app/popup/index.js",
-    mode: NODE_ENV,
+    entry: "./src/index.js",
+    mode: "development",
     devtool: "cheap-module-source-map",
     output: {
-      path: path.resolve(__dirname, "app/build"),
+      path: path.resolve(__dirname, MODE === "app" ? "build" : "app/build"),
       filename: "script.js",
     },
     devServer: {
-      contentBase: path.join(__dirname, "app/build"),
+      contentBase: path.join(__dirname, "build"),
       port: 9001,
       clientLogLevel: "silent",
       open: true,
@@ -51,7 +51,7 @@ module.exports = (env) => {
       ],
     },
     plugins: [
-      new HtmlWebpackPlugin({ template: "./app/popup/index.html" }),
+      new HtmlWebpackPlugin({ template: "./src/index.html" }),
       new webpack.DefinePlugin({
         __TYPE__: JSON.stringify(MODE),
         __ENV__: JSON.stringify(NODE_ENV),
