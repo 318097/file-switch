@@ -12,6 +12,7 @@ import History from "./components/History";
 import Auth from "./components/Auth";
 import AddItem from "./components/AddItem";
 import Header from "./components/Header";
+import ErrorBoundary from "./ErrorBoundaries";
 
 axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["external-source"] = "FLASH";
@@ -99,26 +100,28 @@ const App = () => {
   };
 
   return (
-    <div className="react-ui flash-container">
-      <Card hover={false} className="app-content">
-        <Header
-          logout={logout}
-          state={state}
-          activePage={activePage}
-          setActivePage={setActivePage}
-        />
-        {!initLoading && (
-          <ActivePage
+    <ErrorBoundary>
+      <div className="react-ui flash-container">
+        <Card hover={false} className="app-content">
+          <Header
+            logout={logout}
             state={state}
-            dispatch={dispatch}
             activePage={activePage}
             setActivePage={setActivePage}
-            setAppLoading={setAppLoading}
           />
-        )}
-      </Card>
-      {(initLoading || appLoading) && <div className="loader" />}
-    </div>
+          {!initLoading && (
+            <ActivePage
+              state={state}
+              dispatch={dispatch}
+              activePage={activePage}
+              setActivePage={setActivePage}
+              setAppLoading={setAppLoading}
+            />
+          )}
+        </Card>
+        {(initLoading || appLoading) && <div className="loader" />}
+      </div>
+    </ErrorBoundary>
   );
 };
 

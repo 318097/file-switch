@@ -19,9 +19,10 @@ module.exports = (env) => {
       filename: "script.js",
     },
     devServer: {
-      contentBase: path.join(__dirname, "build"),
+      static: {
+        directory: path.join(__dirname, "build"),
+      },
       port: 9001,
-      clientLogLevel: "silent",
       open: true,
     },
     module: {

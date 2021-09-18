@@ -5,6 +5,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+    "prebuild": "rm -rf app/build",
     "dev:app": "webpack server --env NODE_ENV=development MODE=app",
     "dev:ext": "webpack --env NODE_ENV=development MODE=ext",
     "build:ext": "webpack --env NODE_ENV=production MODE=ext",
@@ -12,38 +13,38 @@
     "fix": "eslint --fix src/"
   },
   "dependencies": {
-    "@babel/runtime": "^7.14.6",
-    "@codedrops/lib": "^0.0.32",
-    "@codedrops/react-ui": "^3.0.14",
+    "@babel/runtime": "^7.15.3",
+    "@codedrops/lib": "^0.0.33",
+    "@codedrops/react-ui": "^3.0.15",
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "lodash": "^4.17.21",
-    "markdown-it": "^12.1.0",
+    "markdown-it": "^12.2.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "styled-components": "^5.3.0",
     "uuid": "^8.3.2",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@babel/plugin-transform-runtime": "^7.14.5",
-    "@babel/preset-env": "^7.14.7",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "@svgr/webpack": "^5.5.0",
     "babel-loader": "^8.2.2",
-    "css-loader": "^6.1.0",
-    "eslint": "^7.31.0",
-    "eslint-plugin-import": "^2.23.4",
+    "css-loader": "^6.2.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.24.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.1.0",
-    "style-loader": "^3.1.0",
-    "webpack": "^5.45.1",
-    "webpack-cli": "^4.7.2"
+    "style-loader": "^3.2.1",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0"
   }
 }
