@@ -94,7 +94,8 @@ const App = () => {
   };
 
   const save = () => {
-    if (initLoading || appLoading) return;
+    if (initLoading) return;
+
     const dataToSave = _.pick(state, KEYS_TO_SAVE);
     setDataInStorage(dataToSave);
   };
