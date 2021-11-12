@@ -9,6 +9,7 @@
     "dev:app": "webpack server --env NODE_ENV=development MODE=app",
     "dev:ext": "webpack --env NODE_ENV=development MODE=ext",
     "build:ext": "webpack --env NODE_ENV=production MODE=ext",
+    "build:app": "webpack --env NODE_ENV=production MODE=app",
     "lint": "eslint --ext js,jsx src/",
     "fix": "eslint --fix src/"
   },
