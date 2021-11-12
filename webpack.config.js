@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = (env) => {
   const { NODE_ENV, MODE } = env;
@@ -52,6 +53,9 @@ module.exports = (env) => {
       ],
     },
     plugins: [
+      new CopyPlugin({
+        patterns: [{ from: "./public", to: "." }],
+      }),
       new HtmlWebpackPlugin({ template: "./src/index.html" }),
       new webpack.DefinePlugin({
         __TYPE__: JSON.stringify(MODE),
