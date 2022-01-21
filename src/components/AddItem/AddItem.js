@@ -97,12 +97,10 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
     }
   };
 
-  const options = Object.entries(_.get(state, "session.notesApp", {})).map(
-    ([id, config]) => ({
-      value: id,
-      label: _.get(config, "name", ""),
-    })
-  );
+  const options = _.get(state, "session.notebase", []).map(({ _id, name }) => ({
+    value: _id,
+    label: name,
+  }));
 
   return (
     <div className="add-container">
