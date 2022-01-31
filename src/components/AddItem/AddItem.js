@@ -19,6 +19,7 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
   const { data, activeCollectionId, appLoading } = state;
   const { title, content, url, domain } = data || {};
   const searchDbDebounced = useRef();
+  // const inputRef = useRef();
 
   const [creationMode, setCreationMode] = useState("QUICK");
   const [searchResults, setSearchResults] = useState([]);
@@ -88,8 +89,11 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
           },
         }
       );
+
+      // if (inputRef.current?.focus) {
       setSearchResults(result.data.posts);
       setShowSearchResults(true);
+      // }
     } catch (error) {
       handleError(error);
     } finally {
@@ -125,32 +129,35 @@ const AddItem = ({ state, dispatch, setAppLoading }) => {
       </div>
 
       <div className="controls">
-        <Input
-          value={title}
-          name="title"
-          autoComplete="off"
-          onChange={(e, value) => {
-            handleChange(value);
-            // searchDbDebounced.current(value);
-          }}
-          placeholder="Title"
-          autoFocus
-          onBlur={() => setShowSearchResults(false)}
-        />
-        {/* {showSearchResults && !!title && (
-          <div className="search-results">
-            {searchResults.length ? (
-              searchResults.map(({ index, title, _id }) => (
-                <div
-                  className="flex item"
-                  key={_id}
-                >{`${index}. ${title}`}</div>
-              ))
-            ) : (
-              <div className="empty">No search result.</div>
-            )}
-          </div>
-        )} */}
+        <div className="input-wrapper">
+          <Input
+            value={title}
+            name="title"
+            // ref={inputRef}
+            autoComplete="off"
+            onChange={(e, value) => {
+              handleChange(value);
+              searchDbDebounced.current(value);
+            }}
+            placeholder="Title"
+            autoFocus
+            onBlur={() => setShowSearchResults(false)}
+          />
+          {showSearchResults && !!title && (
+            <div className="search-results">
+              {searchResults.length ? (
+                searchResults.map(({ index, title, _id }) => (
+                  <div
+                    className="flex item"
+                    key={_id}
+                  >{`${index}. ${title}`}</div>
+                ))
+              ) : (
+                <div className="empty">No search result.</div>
+              )}
+            </div>
+          )}
+        </div>
         {creationMode !== "SINGLE" && (
           <Fragment>
             <TextArea

@@ -33,7 +33,6 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
       <div className="container">
         <h3>Login</h3>
         <Input
-          className="inp"
           placeholder="Username"
           name="username"
           value={data.username}
@@ -41,8 +40,8 @@ const Auth = ({ state, dispatch, setActivePage, setAppLoading }) => {
         />
         <Input
           type="password"
-          className="inp"
           placeholder="Password"
+          className="mt"
           name="password"
           value={data.password}
           onChange={(_, value) => setInputData(value)}
